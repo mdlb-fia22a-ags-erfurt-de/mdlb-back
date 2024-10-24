@@ -1,4 +1,4 @@
-package mdlb.fia22a.ags.de.mdlb_back.commands;
+/*package mdlb.fia22a.ags.de.mdlb_back.runners;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
@@ -16,4 +16,4 @@ public class WelcomeMessageRunner implements CommandLineRunner {
         System.out.println("Please use 'login <username> <password>' to access admin features.");
         System.out.println("=======================================================");
     }
-}
+}*/
