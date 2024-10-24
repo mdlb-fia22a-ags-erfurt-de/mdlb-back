@@ -1,7 +1,6 @@
 package mdlb.fia22a.ags.de.mdlb_back.commands;
 
 import jakarta.annotation.PostConstruct;
-import mdlb.fia22a.ags.de.mdlb_back.models.Log;
 import mdlb.fia22a.ags.de.mdlb_back.models.Sensor;
 import mdlb.fia22a.ags.de.mdlb_back.models.User;
 import mdlb.fia22a.ags.de.mdlb_back.services.LogService;
@@ -15,8 +14,6 @@ import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellMethodAvailability;
 import org.springframework.shell.standard.ShellOption;
 
-import java.util.List;
-
 @ShellComponent
 public class AdminCommands {
     private final UserService userService;
@@ -24,7 +21,6 @@ public class AdminCommands {
     private final TemperatureMeasurementService temperatureService;
     private final SensorService sensorService;
     private boolean isLoggedIn = false;
-    private String currentUser = null;
 
     @Autowired
     public AdminCommands(UserService userService, LogService logService,
@@ -46,32 +42,28 @@ public class AdminCommands {
     }
 
     @ShellMethod(value = "Login as admin", key = "login")
-    public String login(@ShellOption String username, @ShellOption String password) {
+    public String login(
+            @ShellOption(value = {"-u", "--username"}, help = "Admin username") String username,
+            @ShellOption(value = {"-p", "--password"}, help = "Admin password") String password) {
         if (this.userService.authenticateAdmin(username, password)) {
             this.isLoggedIn = true;
-            this.currentUser = username;
             return "Logged in successfully as " + username + ". Type 'help' to see available commands.";
         }
         return "Invalid credentials. Please try again.";
     }
 
-    @ShellMethod(value = "View log table", key = "view-logs")
+    @ShellMethod(value = "View logs", key = "view-logs")
     public String viewLogs() {
         if (!this.isLoggedIn) return "Please login first.";
-        List<Log> logs = this.logService.getAllLogs();
-        StringBuilder sb = new StringBuilder();
-        for (Log log : logs) {
-            sb.append(log.toString()).append("\n");
-        }
-        return sb.toString();
+        return this.logService.getFormattedLogs();
     }
 
     @ShellMethod(value = "Manage users", key = "manage-users")
     public String manageUsers(
-            @ShellOption String action,
-            @ShellOption String username,
-            @ShellOption(defaultValue = "") String password,
-            @ShellOption(defaultValue = "false") boolean isAdmin
+            @ShellOption(help = "Action to perform: view, create, delete") String action,
+            @ShellOption(help = "Username of the user") String username,
+            @ShellOption(defaultValue = "", help = "Password for new user (required for 'create' action)") String password,
+            @ShellOption(defaultValue = "false", help = "Set to true for admin privileges") boolean isAdmin
     ) {
         if (!this.isLoggedIn) return "Please login first.";
         return switch (action) {
@@ -80,6 +72,9 @@ public class AdminCommands {
                 yield user != null ? user.toString() : "User not found.";
             }
             case "create" -> {
+                if (password.isEmpty()) {
+                    yield "Password is required for creating a new user.";
+                }
                 User newUser = this.userService.createUser(username, password, isAdmin);
                 yield "User created: " + newUser.toString();
             }
@@ -87,19 +82,22 @@ public class AdminCommands {
                 this.userService.deleteUser(username);
                 yield "User deleted";
             }
-            default -> "Invalid action.";
+            default -> "Invalid action. Use 'view', 'create', or 'delete'.";
         };
     }
 
     @ShellMethod(value = "Delete temperature data", key = "delete-temp")
-    public String deleteTemperatureData(@ShellOption int measurementId) {
+    public String deleteTemperatureData(
+            @ShellOption(help = "ID of the temperature measurement to delete") int measurementId) {
         if (!this.isLoggedIn) return "Please login first.";
         this.temperatureService.deleteTemperatureMeasurement(measurementId);
         return "Temperature data deleted.";
     }
 
     @ShellMethod(value = "Manage sensor data", key = "manage-sensor")
-    public String manageSensorData(@ShellOption String action, @ShellOption int sensorId) {
+    public String manageSensorData(
+            @ShellOption(help = "Action to perform: view or delete") String action,
+            @ShellOption(help = "ID of the sensor") int sensorId) {
         if (!this.isLoggedIn) return "Please login first.";
         return switch (action) {
             case "view" -> {
@@ -110,7 +108,7 @@ public class AdminCommands {
                 this.sensorService.deleteSensor(sensorId);
                 yield "Sensor deleted.";
             }
-            default -> "Invalid action.";
+            default -> "Invalid action. Use 'view' or 'delete'.";
         };
     }
 
@@ -118,13 +116,12 @@ public class AdminCommands {
     public String logout() {
         if (this.isLoggedIn) {
             this.isLoggedIn = false;
-            currentUser = null;
             return "Logged out successfully.";
         }
         return "You are not logged in.";
     }
 
-    @ShellMethod(value = "Display help information", key = "help")
+    /* @ShellMethod(value = "Display help information", key = "help")
     public String displayHelp() {
         if (!this.isLoggedIn) {
             return """
@@ -142,7 +139,7 @@ public class AdminCommands {
                 help - Display this help message
                 logout - Log out of the admin account
                 exit - Exit the application""";
-    }
+    } */
 
     @ShellMethodAvailability({"view-logs", "manage-users", "delete-temp", "manage-sensor"})
     public Availability adminCommandAvailability() {

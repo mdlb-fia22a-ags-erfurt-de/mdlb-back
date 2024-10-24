@@ -82,4 +82,10 @@ public class Log {
     public void setModificationTime(Date modificationTime) {
         this.modificationTime = modificationTime;
     }
+
+    @Override
+    public String toString() {
+        return String.format("Log[id=%d, oldMaxTemp=%.2f, newMaxTemp=%.2f, modTime=%s]",
+                this.logId, this.oldMaxTemperature, this.newMaxTemperature, this.modificationTime);
+    }
 }
