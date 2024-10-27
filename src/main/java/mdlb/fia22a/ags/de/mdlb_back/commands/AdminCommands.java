@@ -69,18 +69,33 @@ public class AdminCommands {
         return switch (action) {
             case "view" -> {
                 User user = this.userService.getUser(username);
-                yield user != null ? user.toString() : "User not found.";
+                if (user != null) {
+                    yield String.format("User found:\n" +
+                                    "  ID: %d\n" +
+                                    "  Username: %s\n" +
+                                    "  Is Admin: %s",
+                            user.getUserId(), user.getUsername(),
+                            user.isAdmin() ? "Yes" : "No");
+                } else {
+                    yield "User not found.";
+                }
             }
             case "create" -> {
                 if (password.isEmpty()) {
                     yield "Password is required for creating a new user.";
                 }
                 User newUser = this.userService.createUser(username, password, isAdmin);
-                yield "User created: " + newUser.toString();
+                yield String.format("""
+                                User created:
+                                  ID: %d
+                                  Username: %s
+                                  Is Admin: %s""",
+                        newUser.getUserId(), newUser.getUsername(),
+                        newUser.isAdmin() ? "Yes" : "No");
             }
             case "delete" -> {
                 this.userService.deleteUser(username);
-                yield "User deleted";
+                yield "User deleted: " + username;
             }
             default -> "Invalid action. Use 'view', 'create', or 'delete'.";
         };
@@ -102,7 +117,20 @@ public class AdminCommands {
         return switch (action) {
             case "view" -> {
                 Sensor sensor = this.sensorService.getSensor(sensorId);
-                yield sensor != null ? "Sensor found: " + sensor : "Sensor not found.";
+                if (sensor != null) {
+                    yield String.format("""
+                                    Sensor found:
+                                      ID: %d
+                                      Manufacturer: %s
+                                      Model: %s
+                                      Location: %s
+                                      Max Temperature: %.2f""",
+                            sensor.getSensorId(), sensor.getManufacturer(),
+                            sensor.getModel(), sensor.getLocation(),
+                            sensor.getMaxTemperature());
+                } else {
+                    yield "Sensor not found.";
+                }
             }
             case "delete" -> {
                 this.sensorService.deleteSensor(sensorId);
@@ -120,26 +148,6 @@ public class AdminCommands {
         }
         return "You are not logged in.";
     }
-
-    /* @ShellMethod(value = "Display help information", key = "help")
-    public String displayHelp() {
-        if (!this.isLoggedIn) {
-            return """
-                    Available commands:
-                    login <username> <password> - Log in as an admin
-                    help - Display this help message
-                    exit - Exit the application""";
-        }
-        return """
-                Available commands:
-                view-logs - View the log table
-                manage-users <action> <username> [password] [isAdmin] - Manage users (actions: view, create, update, delete)
-                delete-temp <measurementId> - Delete temperature data
-                manage-sensor <action> <sensorId> - Manage sensor data (actions: view, delete)
-                help - Display this help message
-                logout - Log out of the admin account
-                exit - Exit the application""";
-    } */
 
     @ShellMethodAvailability({"view-logs", "manage-users", "delete-temp", "manage-sensor"})
     public Availability adminCommandAvailability() {

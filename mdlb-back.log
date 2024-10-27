@@ -68,3 +68,88 @@
 1729765591020:login admin password123
 1729765595224:view-logs
 1729765597766:quit
+1729767896117:htlp
+1729767898897:help
+1729767914315:login admin password123
+1729768023588:help
+1729768032811:manage-users
+1729768172763:manage-users view
+1729768179864:manage-users view admin
+1729768324201:manage-users --help
+1729769750130:logout
+1729769762863:quit
+1729769993227:help
+1729770009851:view-logs
+1729770033936:login admin password123
+1729770037143:help
+1729770042649:view-logs
+1729770052389:manage-user
+1729770057109:manage-users
+1729770068748:manage users view admin
+1729770074280:manage-users view admin
+1729770126523:manage-users create
+1729770281922:manage-users create test_user testuser1234
+1729770395810:quit
+1729951509040:help
+1729951516833:login admin password123
+1729951520282:help
+1729951526769:logout
+1729951538499:login admin password123
+1729951555663:manage-users -help
+1729951589741:manage-sensor
+1729951595261:manage-sensor view
+1729951599411:manage-sensor view 1
+1729951611456:manage-sensor -h
+1730036278791:quit
+1730036307637:login admin password123
+1730036319580:manage-sensor view 1
+1730036329805:help
+1730036341118:manage-users -h
+1730036399148:manage-users view john_doe
+1730036662494:quit
+1730036684870:login admin password123
+1730036688940:manage-users view john_doe
+1730037258193:manage-users -h
+1730037305488:manage-users create test_user_ii passuserii
+1730037328137:manage-users create test_adminuser_ii passadminuserii true
+1730037364684:logout
+1730037383252:login test_adminuser_ii passadminuserli
+1730038346254:quit
+1730038363046:login admin password123
+1730038630221:help
+1730038663664:quit
+1730039010219:login admin password123
+1730039016098:manage-user-h
+1730039020327:manage-users -h
+1730039047897:manage-users delete john_doe
+1730039064641:manage-users delete jane_smith
+1730039072703:manage-users delete test_user
+1730039081073:manage-users delete test_user_ii
+1730039089320:manage-users delete test_adminuser_ii
+1730039092134:manage-users delete test_adminuser_i
+1730039127942:manage-users create admin_user password123
+1730039155121:logout
+1730039169218:login new_admin_user password123
+1730039185882:quit
+1730039207469:login admin_user password123
+1730039231815:login admin password123
+1730039291130:quit
+1730039312818:login admin password123
+1730039322783:manage-user -h
+1730039326441:manage-users -h
+1730039354306:manage-users admin_user --isAdmin=true
+1730039360852:manage-users admin_user --isAdmin = true
+1730039365507:manage-users admin_user --isAdmin true
+1730039385257:manage-users admin_user true
+1730039392937:manage-users admin_user password123 true
+1730039416746:manage-users delete admin_user
+1730039436799:manage-users create admin_user password123 true
+1730039442698:logout
+1730039444180:quit
+1730039485574:login admin_user password123
+1730039495804:help
+1730039509493:manage-sensor
+1730039513050:manage-sensor 1
+1730039516562:manage-sensor -h
+1730039522429:manage-sensor view 1
+1730039535818:view-logs

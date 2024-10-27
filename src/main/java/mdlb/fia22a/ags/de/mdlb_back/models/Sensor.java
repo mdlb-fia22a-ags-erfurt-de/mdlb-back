@@ -67,4 +67,11 @@ public class Sensor {
     public void setMaxTemperature(Float maxTemperature) {
         this.maxTemperature = maxTemperature;
     }
+
+    @Override
+    public String toString() {
+        return String.format("Sensor[id=%d, manufacturer='%s', model='%s', location='%s', maxTemperature=%.2f]",
+                this.sensorId, this.manufacturer, this.model, this.location, this.maxTemperature);
+    }
+
 }

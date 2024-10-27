@@ -53,4 +53,10 @@ public class User {
     public void setAdmin(boolean admin) {
         this.isAdmin = admin;
     }
+
+    @Override
+    public String toString() {
+        return String.format("User[id=%d, username='%s', isAdmin=%b]",
+                this.userId, this.username, this.isAdmin);
+    }
 }

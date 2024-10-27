@@ -17,9 +17,14 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public boolean authenticateAdmin(String username, String password) {
+    /*public boolean authenticateAdmin(String username, String password) {
         User user = this.userRepository.findByUsername(username);
         return user != null && user.getPassword().equals(password) && user.isAdmin();
+    }*/
+
+    public boolean authenticateAdmin(String username, String password) {
+        User user = this.userRepository.findByUsername(username);
+        return user != null && passwordEncoder.matches(password, user.getPassword()) && user.isAdmin();
     }
 
     public User getUser(String username) {
