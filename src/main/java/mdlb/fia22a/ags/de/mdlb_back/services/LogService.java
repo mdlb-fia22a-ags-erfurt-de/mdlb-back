@@ -1,10 +1,12 @@
 package mdlb.fia22a.ags.de.mdlb_back.services;
 
 import mdlb.fia22a.ags.de.mdlb_back.models.Log;
+import mdlb.fia22a.ags.de.mdlb_back.models.Sensor;
 import mdlb.fia22a.ags.de.mdlb_back.repositories.LogRepository;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -33,5 +35,14 @@ public class LogService {
                     new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(log.getModificationTime())));
         }
         return sb.toString();
+    }
+
+    public void logMaxTemperatureChange(Sensor sensor, Float oldMaxTemperature, Float newMaxTemperature) {
+        Log log = new Log();
+        log.setSensor(sensor);
+        log.setOldMaxTemperature(oldMaxTemperature);
+        log.setNewMaxTemperature(newMaxTemperature);
+        // log.setModificationTime(LocalDateTime.now());
+        logRepository.save(log);
     }
 }

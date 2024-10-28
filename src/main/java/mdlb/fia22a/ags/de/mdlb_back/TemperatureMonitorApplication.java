@@ -9,7 +9,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableJpaRepositories
 @EntityScan
 public class TemperatureMonitorApplication {
-
 	public static void main(String[] args) {
 		SpringApplication.run(TemperatureMonitorApplication.class, args);
 	}
